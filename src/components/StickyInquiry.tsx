@@ -55,14 +55,7 @@ const StickyInquiry: React.FC = () => {
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#c46a32]"
                 required
               />
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#c46a32]"
-                required
-              />
+             
               <button
                 type="submit"
                 className="text-white py-2 px-6 rounded-md hover:bg-green-700 transition-colors duration-300 whitespace-nowrap"

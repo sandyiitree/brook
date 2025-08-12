@@ -38,11 +38,7 @@ const Contact: React.FC = () => {
       newErrors.name = 'Name is required';
     }
     
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-    }
+ 
     
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
@@ -153,21 +149,7 @@ const Contact: React.FC = () => {
                     {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                   </div>
                   
-                  <div>
-                    <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Email Address*</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#c46a32] ${
-                        errors.email ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="Your email"
-                    />
-                    {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                  </div>
+  
                   
                   <div>
                     <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">Phone Number*</label>

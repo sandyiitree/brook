@@ -48,31 +48,31 @@ const About: React.FC = () => {
   return (
     <section id="about" className="py-20 bg-white text-gray-800">
       <div className="container mx-auto px-4 max-w-7xl space-y-20">
-
-        {/* Mission */}
+{/* dfkd      
+        
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Mission</h2>
           <p>
             To strive to exceed our customer’s expectations by delivering supreme quality constructions that stand the test of time – all through timely delivery, complete transparency, and professionalism of the utmost degree.
           </p>
         </div>
-
-        {/* Vision */}
+        
+        
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Vision</h2>
           <p>
             To be a reliable and dependable real estate entity by benchmarking global standards in different types of real-estate products, and new-age constructional concepts.
           </p>
         </div>
-
-        {/* Core Values */}
+        
+        
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Core Values</h2>
           <p>
             To create and deliver palatial residential marvels, we are unwaveringly committed to the highest ethical standards with a zero compromise on quality, and attention to detail. Delivering on our mission with utmost degree of honesty and transparency, we practise fairness in all our actions, and always endeavor to execute a win-win for all involved in the transactions that we do. We consider customers our real assets, and therefore strive to deliver an always-wow experience to them. We always embrace forward thinking and thus create practical and futuristic abodes for our customers.
           </p>
         </div>
-
+        */}
         {/* Value Proposition */}
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-8">Value Proposition</h2>
