@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Phone } from 'lucide-react';
+import { validatePhoneNumber } from '../utils/phoneUtils';
+import { submitLeadToAnarock } from '../utils/anarockApi';
 
 const StickyInquiry: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -7,14 +9,50 @@ const StickyInquiry: React.FC = () => {
     email: '',
     phone: '',
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Sticky form submitted:', formData);
-    setFormData({ name: '', email: '', phone: '' });
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.name.trim()) newErrors.name = 'Name is required';
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!validatePhoneNumber(formData.phone)) {
+      newErrors.phone = 'Please enter a valid 10-digit phone number';
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const phoneNumber = '+914071242692';
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      setIsSubmitting(true);
+      setSubmitError('');
+      try {
+        const result = await submitLeadToAnarock({
+          ...formData,
+          message: '',
+          interested: 'sales',
+        });
+        if (result.success) {
+          setIsSubmitted(true);
+          setFormData({ name: '', email: '', phone: '' });
+          setTimeout(() => setIsSubmitted(false), 4000);
+        } else {
+          setSubmitError(result.message || 'Failed to submit inquiry. Please try again.');
+        }
+      } catch (error) {
+        setSubmitError('Network error. Please check your connection and try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }
+  };
+
+  const phoneNumber = '+911141182699';
 
   return (
     <>
@@ -55,15 +93,29 @@ const StickyInquiry: React.FC = () => {
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#c46a32]"
                 required
               />
+              
              
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="text-white py-2 px-6 rounded-md hover:bg-green-700 transition-colors duration-300 whitespace-nowrap"
                 style={{background: 'linear-gradient(313deg, #8c5438 0%, #c76a43 50%, #f3b79e 100%)'}}
               >
-                Submit
+              {isSubmitting ? (
+                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white inline-block mr-2"></span>
+              ) : null}
+              {isSubmitting ? 'Submitting...' : 'Submit'}
               </button>
             </form>
+          </div>
+          {/* Error/Success Feedback */}
+          <div className="flex justify-end mt-2 max-w-3xl ml-auto">
+            {isSubmitted && (
+              <div className="bg-green-600/10 border border-green-600/20 rounded-md p-2 text-green-400 text-sm mr-2">Thank you! Your inquiry has been submitted.</div>
+            )}
+            {submitError && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-md p-2 text-red-400 text-sm">{submitError}</div>
+            )}
           </div>
         </div>
       </div>

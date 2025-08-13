@@ -23,8 +23,8 @@ const Hero: React.FC = () => {
   className="relative h-screen flex items-center 
              bg-no-repeat bg-center 
              md:bg-contain bg-contain
-             bg-[url('https://waitwhiz.s3.ap-south-1.amazonaws.com/digital/brook+square+banner+laptop+(900+x+1600+px).jpg')] 
-             md:bg-[url('https://waitwhiz.s3.ap-south-1.amazonaws.com/digital/brook+square+banner+laptop.jpg')]"
+             bg-[url('https://waitwhiz.s3.ap-south-1.amazonaws.com/digital/WhatsApp+Image+2025-08-13+at+13.03.04.jpg')] 
+             md:bg-[url('https://waitwhiz.s3.ap-south-1.amazonaws.com/digital/brook+square+banner+laptop+(1200+x+500+px).jpg')]"
 >
 
 

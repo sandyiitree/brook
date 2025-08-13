@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useInView } from '../hooks/useInView';
 import { Phone, Mail, MapPin, Send } from 'lucide-react';
+import { validatePhoneNumber } from '../utils/phoneUtils';
+import { submitLeadToAnarock } from '../utils/anarockApi';
 
 const Contact: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -16,6 +18,8 @@ const Contact: React.FC = () => {
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string>('');
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -42,7 +46,7 @@ const Contact: React.FC = () => {
     
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required';
-    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ''))) {
+    } else if (!validatePhoneNumber(formData.phone)) {
       newErrors.phone = 'Please enter a valid 10-digit phone number';
     }
     
@@ -50,24 +54,39 @@ const Contact: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
-      console.log('Form submitted:', formData);
-      setIsSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-        interested: 'sales'
-      });
+      setIsSubmitting(true);
+      setSubmitError('');
+      
+      try {
+        const result = await submitLeadToAnarock(formData);
+        
+        if (result.success) {
+          setIsSubmitted(true);
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            message: '',
+            interested: 'sales'
+          });
+        } else {
+          setSubmitError(result.message || 'Failed to submit inquiry. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        setSubmitError('Network error. Please check your connection and try again.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
   
   const contactInfo = [
-    { icon: <Phone className="h-5 w-5" />, text: "+91 1234 567 890" }
+    { icon: <Phone className="h-5 w-5" />, text: "+91 1141 182 699" }
   ];
 
   return (
@@ -198,11 +217,21 @@ const Contact: React.FC = () => {
                   
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="text-white font-semibold py-3 px-6 rounded-md transition-colors duration-300 flex items-center justify-center"
                     style={{background: 'linear-gradient(313deg, #8c5438 0%, #c76a43 50%, #f3b79e 100%)'}}
                   >
-                    Submit Inquiry
-                    <Send className="ml-2 h-4 w-4" />
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-5 w-5 mr-2" />
+                      Send Inquiry
+                    </>
+                  )}
                   </button>
                 </div>
               </form>
